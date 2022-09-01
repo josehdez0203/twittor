@@ -3,13 +3,12 @@ package routers
 import (
 	"encoding/json"
 	"net/http"
-
 	"twittor/bd"
 	"twittor/models"
 )
 
 //Registro de usuarios
-func Registro(w http.ResponseWriter, r http.Request) {
+func Registro(w http.ResponseWriter, r *http.Request) {
 	var t models.Usuario
 	err := json.NewDecoder(r.Body).Decode(&t)
 	if err != nil {
@@ -36,7 +35,7 @@ func Registro(w http.ResponseWriter, r http.Request) {
 		http.Error(w, "Ocurrió un error al intentar registrar usuario"+err.Error(), 400)
 		return
 	}
-	if status == false {
+	if status {
 		http.Error(w, "No se pudo registrar usuario"+err.Error(), 400)
 		return
 	}
