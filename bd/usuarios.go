@@ -49,3 +49,23 @@ func UsuarioExistente(e string) (models.Usuario, bool, string) {
 	}
 	return resultado, true, ID
 }
+func UsuarioXID(id string) (models.Usuario, error ) {
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	db := MongoCN.Database("twittor")
+	col := db.Collection("usuarios")
+  ObjID, err := primitive.ObjectIDFromHex(id)
+  if err!=nil{
+    return models.Usuario{}, err
+  }
+
+	condicion := bson.M{"_id": ObjID}
+	var resultado models.Usuario
+
+	err = col.FindOne(ctx, condicion).Decode(&resultado)
+	if err != nil {
+		return resultado, err
+  }
+	return resultado, nil
+}
