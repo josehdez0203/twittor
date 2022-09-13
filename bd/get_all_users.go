@@ -12,7 +12,7 @@ import (
 
 func GetUsersAll(ID string, page int64, search string, tipo string) ([]*models.Usuario, bool) {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
-
+  cuantos:=5
 	defer cancel()
 
 	db := MongoCN.Database("twittor")
@@ -22,8 +22,8 @@ func GetUsersAll(ID string, page int64, search string, tipo string) ([]*models.U
 
 	findOptions := options.Find()
 
-	findOptions.SetSkip((page - 1) * 20)
-	findOptions.SetLimit(20)
+	findOptions.SetSkip((page - 1) * int64(cuantos))
+	findOptions.SetLimit(int64(cuantos))
 
 	query := bson.M{
 		"nombre": bson.M{"$regex": `(?i)` + search},
@@ -31,7 +31,7 @@ func GetUsersAll(ID string, page int64, search string, tipo string) ([]*models.U
 
 	cur, err := col.Find(ctx, query, findOptions)
 	if err != nil {
-		fmt.Println(err.Error())
+    fmt.Println(" 🆗 " +err.Error())
 		return results, false
 	}
 

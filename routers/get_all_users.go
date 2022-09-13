@@ -2,6 +2,7 @@ package routers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strconv"
 	"twittor/bd"
@@ -11,6 +12,7 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	typeUser := r.URL.Query().Get("type")
 	page := r.URL.Query().Get("page")
 	search := r.URL.Query().Get("search")
+  log.Println(" 🆘", typeUser, page, search)
 
 	pagTemp, err := strconv.Atoi(page)
 	if err != nil {

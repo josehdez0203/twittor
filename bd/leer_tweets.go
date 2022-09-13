@@ -10,13 +10,13 @@ import (
 
 func LeerTweets(ID string, pagina int) ([]models.RespuestaTweetsSeguidores, bool) {
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
-
+  cuantos:=4
 	defer cancel()
 
 	db := MongoCN.Database("twittor")
 	col := db.Collection("relations")
 
-	skip := (pagina - 1) * 20
+	skip := (pagina - 1) * cuantos
 
 	condiciones := make([]bson.M, 0)
 	condiciones = append(condiciones, bson.M{"$match": bson.M{"usuarioid": ID}})
@@ -25,13 +25,13 @@ func LeerTweets(ID string, pagina int) ([]models.RespuestaTweetsSeguidores, bool
 			"from":         "tweets",
 			"localField":   "usuariorelationid",
 			"foreignField": "userid",
-			"as":           "tweets",
+			"as":           "tweet",
 		},
 	})
-	condiciones = append(condiciones, bson.M{"$unwind": "$tweets"})
-	condiciones = append(condiciones, bson.M{"$sort": bson.M{"tweets.fecha": -1}})
+	condiciones = append(condiciones, bson.M{"$unwind": "$tweet"})
+	condiciones = append(condiciones, bson.M{"$sort": bson.M{"tweet.fecha": -1}})
 	condiciones = append(condiciones, bson.M{"$skip": skip})
-	condiciones = append(condiciones, bson.M{"$limit": 20})
+	condiciones = append(condiciones, bson.M{"$limit": cuantos})
 
 	cursor, _ := col.Aggregate(ctx, condiciones)
 

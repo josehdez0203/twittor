@@ -3,6 +3,7 @@ package bd
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 	"twittor/models"
 
@@ -25,9 +26,11 @@ func BuscarPerfil(ID string) (models.Usuario, error) {
   perfil.Password=""
 
   if err!=nil{
+    log.Println("Respuesta fallida 📛" )
     fmt.Println("Registro no encontrado "+err.Error())
     return perfil, err
   }
+  log.Println("Respuesta Ok, 🆗" )
   return perfil, nil
 
 }

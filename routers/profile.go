@@ -1,9 +1,10 @@
 package routers
 
-import(
-  "encoding/json"
-  "net/http"
-  "twittor/bd"
+import (
+	"encoding/json"
+	"log"
+	"net/http"
+	"twittor/bd"
 )
 
 func GetProfile(w http.ResponseWriter, r *http.Request){
@@ -14,6 +15,7 @@ func GetProfile(w http.ResponseWriter, r *http.Request){
   }
 
   perfil, err := bd.BuscarPerfil(ID)
+  log.Println("Request Ok, inicia respuesta 🆗" )
   if err!=nil{
 
     http.Error(w,"Ocurrió un error al intentar buscar registro " +err.Error(), 400)
